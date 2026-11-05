@@ -1,0 +1,14 @@
+# Slim build context for Cloud Run (fast builds)
+**/node_modules
+**/dist
+frontend
+.git
+.gitignore
+docs
+*.md
+firebase-debug.log
+*.db
+*.db-shm
+*.db-wal
+backend/data
+backend/.env

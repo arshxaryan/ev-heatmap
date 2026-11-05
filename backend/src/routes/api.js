@@ -175,7 +175,11 @@ router.post('/upload/registrations', upload.single('file'), async (req, res) => 
 });
 
 // ------------------------------------------------------------ refresh (manual)
-const { schedulerStatus } = require('../scheduler');
+const { schedulerStatus, refreshNow } = require('../scheduler');
 router.get('/jobs/status', (_req, res) => { try { res.json(schedulerStatus()); } catch (e) { res.status(500).json(nice(e)); } });
+router.post('/jobs/refresh', async (_req, res) => {
+  try { const r = await refreshNow('manual-http'); res.json({ ok: true, result: r, ...schedulerStatus() }); }
+  catch (e) { res.status(500).json(nice(e)); }
+});
 
 module.exports = router;

@@ -31,7 +31,6 @@ if (process.env.SEED !== 'off' && !getMeta('seed_version')) {
 }
 
 const app = express();
-
 // ---- Security hardening ----------------------------------------------------
 app.disable('x-powered-by');
 app.use(helmet({
@@ -70,9 +69,15 @@ app.use((err, _req, res, _next) => { // eslint-disable-line no-unused-vars
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(config.port, () => {
-  console.log(`[server] EV Gap India API on http://localhost:${config.port}`);
-  require('./scheduler').startScheduler();
-});
+// In-process cron is unreliable under serverless (instances cycle); on Cloud
+// Functions/Run we skip it and call POST /api/refresh from Cloud Scheduler.
+if (process.env.FUNCTION_TARGET || process.env.FIREBASE_CONFIG) {
+  console.log('[server] serverless mode — listening handled by platform');
+} else {
+  app.listen(config.port, () => {
+    console.log(`[server] EV Gap India API on http://localhost:${config.port}`);
+    require('./scheduler').startScheduler();
+  });
+}
 
-module.exports = app;
+module.exports = { app };

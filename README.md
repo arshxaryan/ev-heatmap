@@ -138,14 +138,50 @@ into the **git-ignored** `backend/.env`:
 See `SECURITY.md` for the full threat model (helmet, rate limiting, CORS allow-list, optional API key on uploads).
 
 
-## ☁️ Deployment
+## ☁️ Firebase Hosting + Cloud Run (recommended free-ish path)
 
-* **Frontend → Vercel/Netlify:** build `frontend/` (`npm run build`), set `VITE_API_URL`
-  to your prod API, and add a `/api` rewrite to the backend URL (see `vercel.json`-style rewrites).
-* **Backend → Render/Railway:** start command `npm start` in `backend/`, mount a disk at
-  `backend/data` (SQLite volume), set env from `backend/.env.example`. For >1 instance,
-  switch to Postgres (schema maps 1:1 — see Methodology → Scaling notes).
-* Cron alternative: any scheduler hitting `scripts/fetch-vahan.js --upload` daily.
+Firebase Hosting serves the React SPA free; the `/api/**` rewrite routes
+straight into the backend container on **Cloud Run** (requires a Blaze project;
+low traffic stays inside the free grant). SQLite lives in the container FS, so
+demo data re-seeds on cold start — see "Persistence" below.
+
+One-time setup:
+
+```bash
+npm i -g firebase-tools        # Firebase CLI
+gcloud auth login              # Google Cloud CLI (same account)
+.firebaserc: put YOUR Firebase project id in projects.default
+```
+
+Deploy (frontend build + Cloud Run + hosting + `/api` rewrite) in one shot:
+
+```powershell
+$env:GCP_PROJECT = "your-firebase-project"
+powershell -ExecutionPolicy Bypass -File scripts\deploy-firebase.ps1
+# → https://your-firebase-project.web.app
+```
+
+Files involved: `firebase.json` (hosting + SPA + `/api/**` → Cloud Run rewrite +
+asset caching), `.firebaserc`, root `Dockerfile` (backend image), `.dockerignore`.
+
+**Persistence caveat:** SQLite writes to the container's ephemeral disk. For a
+demo this is fine (auto-seeds on boot); for durable data either set a minimum
+of one Cloud Run instance, or switch the backend to Cloud SQL Postgres (schema
+maps 1:1 — see Methodology → Scaling notes).
+
+**Scheduled refresh on Firebase:** in-process cron is disabled under serverless.
+Create a Cloud Scheduler job (daily 02:30) POSTing to
+`https://your-firebase-project.web.app/api/jobs/refresh` with header
+`x-api-key: <API_KEY>` (set `API_KEY` on the Cloud Run service when you do).
+
+**Free-only alternative:** Firebase Hosting free tier + the backend on
+Render/Railway free tier → set `VITE_API_URL=https://your-backend.onrender.com/api`
+when building the frontend, and skip the `/api` rewrite in `firebase.json`.
+
+## ☁️ Vercel/Netlify alternative
+Frontend → Vercel/Netlify (build `frontend/`, set `VITE_API_URL`, add `/api`
+rewrite via `frontend/vercel.json`); backend → Render/Railway as above.
+
 
 ## 🧪 Quality notes
 

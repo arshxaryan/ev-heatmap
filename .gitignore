@@ -5,3 +5,6 @@ dist/
 *.db-shm
 .env
 .env.local
+firebase-debug.log
+.firebase/
+funcs/node_modules/
