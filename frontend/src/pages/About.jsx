@@ -20,8 +20,8 @@ export default function About() {
       <section className="mt-8" aria-label="Contact">
         <h2 className="text-lg font-bold dark:text-white">Contact</h2>
         <ul className="mt-2 space-y-2 text-sm text-slate-700 dark:text-slate-300">
-          <li>📧 <a className="text-brand-500 hover:underline" href="mailto:hello@evgapindia.example">hello@evgapindia.example</a></li>
-          <li>🐙 Source / issues: <a className="text-brand-500 hover:underline" href="https://github.com/your-org/ev-gap-india">github.com/your-org/ev-gap-india</a></li>
+          <li>📧 hello@evgapindia.example (placeholder — set your own contact)</li>
+          <li>🐙 Source / issues: <a className="text-brand-500 hover:underline" href="https://github.com/arshxaryan/ev-heatmap">github.com/arshxaryan/ev-heatmap</a></li>
           <li>📊 Found a data error? Please include state, district, month and source — we reconcile against official exports.</li>
         </ul>
       </section>
