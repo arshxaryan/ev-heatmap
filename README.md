@@ -1,5 +1,8 @@
 # ⚡ EV Gap India
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2Farshxaryan%2Fev-heatmap)
+[![Firebase Hosting](https://img.shields.io/badge/frontend-careercompass--77eae.web.app-orange)](https://careercompass-77eae.web.app)
+
 **An interactive heat map of EV adoption (Vahan registrations) vs public charging station
 availability — showing where India's charging gaps are.**
 

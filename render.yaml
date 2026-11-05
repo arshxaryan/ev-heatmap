@@ -1,0 +1,34 @@
+# Render Blueprint — EV Gap India backend on the free tier.
+# In Render: New + → Blueprint → pick arshxaryan/ev-heatmap → Apply.
+# After deploy, copy the service URL (https://ev-gap-backend-xxxx.onrender.com)
+# and tell the assistant / use it as VITE_API_URL for the frontend build.
+
+services:
+  - type: web
+    name: ev-gap-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_FILE
+        value: ./data/ev-gap.db
+      - key: SEED
+        value: auto            # auto-seeds realistic demo data on empty DB
+      - key: REFRESH_CRON
+        value: "30 2 * * *"    # in-process daily refresh (Render keeps it alive-ish)
+      - key: AUTO_REFRESH_ON_START
+        value: "true"
+      - key: CORS_ORIGINS
+        value: https://careercompass-77eae.web.app,https://careercompass-77eae.firebaseapp.com
+      # Secrets — set these in the Render dashboard after the first deploy:
+      - key: OCM_API_KEY
+        sync: false
+      - key: API_KEY
+        sync: false
