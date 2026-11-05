@@ -1,0 +1,27 @@
+{
+  "name": "ev-gap-india-backend",
+  "version": "1.0.0",
+  "description": "REST API + ingestion/scheduler for EV Gap India (Vahan registrations vs public charging stations)",
+  "main": "src/server.js",
+  "node": ">=18",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/db/seed.js",
+    "refresh": "node ../scripts/refresh-all.js",
+    "load-sample-csv": "node ../scripts/load-sample-csv.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "better-sqlite3": "^12.11.1",
+    "cors": "^2.8.5",
+    "csv-parse": "^5.6.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3"
+  },
+  "allowScripts": {
+    "better-sqlite3": true
+  }
+}

@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet fit & polish */
+.leaflet-container { font-family: inherit; background: #dbe4e6; }
+.dark .leaflet-container { background: #0f172a; }
+
+/* Dark-mode basemap: invert OSM raster tiles (no API-key basemaps needed) */
+.dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.92) saturate(0.7);
+}
+/* keep heat/marker panes untouched (they sit above the tile pane) */
+.dark .leaflet-tile-pane .leaflet-tile-heat { filter: none; }
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: #fff; color: #1e293b; border-radius: 10px;
+}
+.dark .leaflet-popup-content-wrapper, .dark .leaflet-popup-tip {
+  background: #1e293b; color: #f1f5f9;
+}
+
+/* custom scrollbar */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: rgba(100,116,139,.4); border-radius: 8px; }
+
+html { scroll-behavior: smooth; }

@@ -1,0 +1,9 @@
+state_code,state_name,district,month,category,count
+MH,Maharashtra,Pune,2025-08,2W,4100
+MH,Maharashtra,Pune,2025-08,3W,1180
+MH,Maharashtra,Pune,2025-08,4W,1320
+MH,Maharashtra,Pune,2025-08,BUS,90
+DL,Delhi (NCT),New Delhi,2025-08,2W,2100
+UP,Uttar Pradesh,Lucknow,2025-08,3W,2450
+KA,Karnataka,Bengaluru,2025-08,2W,7300
+BR,Bihar,Patna,2025-08,3W,1650

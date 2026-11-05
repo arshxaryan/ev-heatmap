@@ -1,0 +1,16 @@
+services:
+  backend:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    ports: ["4000:4000"]
+    env_file: [backend/.env]
+    environment: [PORT=4000]
+    volumes:
+      - backend-data:/app/backend/data   # persists SQLite file
+  frontend:
+    build: { context: ., dockerfile: frontend/Dockerfile }
+    ports: ["5173:80"]                    # nginx web root
+    depends_on: [backend]
+    environment:
+      - VITE_API_URL=http://localhost:4000/api
+volumes:
+  backend-data:
