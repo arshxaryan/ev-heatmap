@@ -28,6 +28,10 @@ module.exports = {
   // CORS origins allowed to call the API (comma separated).
   corsOrigins: (process.env.CORS_ORIGINS || '*').split(',').map((s) => s.trim()),
 
+  // Optional shared secret for POST endpoints (uploads). When set, POSTs
+  // require header x-api-key: <key>. Never commit real keys — .env only.
+  apiKey: process.env.API_KEY || '',
+
   // ---- mock/data-shape constants ----
   seed: {
     // Monthly registration series window.

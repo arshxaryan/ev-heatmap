@@ -122,6 +122,22 @@ docker compose up --build
 # frontend on http://localhost:5173 (nginx proxies /api → backend:4000)
 ```
 
+## 🔐 Push this repo to GitHub
+
+Secrets never leave your machine — run the helper after pasting credentials
+into the **git-ignored** `backend/.env`:
+
+1. Create a token at <https://github.com/settings/tokens> (fine-grained, **Contents: Read & Write**, or classic with `repo` scope). It starts with `ghp_` / `github_pat_`.
+2. In `backend/.env`, set `GITHUB_TOKEN`, `GITHUB_USERNAME`, `GITHUB_REPO=ev-gap-india` (file tells you how; it is not committed).
+3. Push (creates the repo if missing):
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts\push-to-github.ps1
+   ```
+   → https://github.com/<you>/ev-gap-india
+
+See `SECURITY.md` for the full threat model (helmet, rate limiting, CORS allow-list, optional API key on uploads).
+
+
 ## ☁️ Deployment
 
 * **Frontend → Vercel/Netlify:** build `frontend/` (`npm run build`), set `VITE_API_URL`
