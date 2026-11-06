@@ -11,7 +11,14 @@
         "source": "/assets/**",
         "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
       },
-      { "source": "/index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+      { "source": "/", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/map", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/stats", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/insights", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/compare", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/methodology", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/about", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
     ]
   }
 }
