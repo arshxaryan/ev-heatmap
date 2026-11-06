@@ -38,20 +38,34 @@ export async function apiGet(path, params = {}) {
   const key = url.replace(BASE, '');
   const hit = cacheGet(key);
   if (hit) return hit;
-  let res;
-  try {
-    res = await fetch(url);
-  } catch (e) {
-    throw new Error(`Network error reaching ${url} — is the backend running?`);
+
+  // Retries for free-tier cold starts: Render sleeps after ~15 min idle and
+  // the first request can take 30–60 s or drop while the instance boots.
+  const RETRIES = 3;
+  for (let attempt = 0; attempt <= RETRIES; attempt++) {
+    if (attempt) await new Promise((r) => setTimeout(r, 2500 * attempt));
+    let res;
+    try {
+      res = await fetch(url);
+    } catch (e) {
+      if (attempt < RETRIES) continue;
+      throw new Error(
+        `The server is waking up (free hosting cold start). ${url} didn't answer after ${RETRIES + 1} tries — tap Retry in a few seconds.`,
+      );
+    }
+    if (res.status === 502 || res.status === 503 || res.status === 429) {
+      if (attempt < RETRIES) continue; // instance booting / rate-limited — try again
+    }
+    if (!res.ok) {
+      let msg = `API ${res.status}`;
+      try { msg = (await res.json()).error || msg; } catch { /* keep default */ }
+      throw new Error(msg);
+    }
+    const data = await res.json();
+    cacheSet(key, data);
+    return data;
   }
-  if (!res.ok) {
-    let msg = `API ${res.status}`;
-    try { msg = (await res.json()).error || msg; } catch { /* keep default */ }
-    throw new Error(msg);
-  }
-  const data = await res.json();
-  cacheSet(key, data);
-  return data;
+  throw new Error('API unreachable');
 }
 
 /** POST multipart CSV upload (cache-bypassing). */
