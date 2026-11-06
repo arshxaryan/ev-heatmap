@@ -26,7 +26,7 @@ services:
       - key: AUTO_REFRESH_ON_START
         value: "true"
       - key: CORS_ORIGINS
-        value: https://careercompass-77eae.web.app,https://careercompass-77eae.firebaseapp.com
+        value: https://careercompass-77eae.web.app,https://careercompass-77eae.firebaseapp.com,https://ev-gap-arshx.web.app
       # Secrets — set these in the Render dashboard after the first deploy:
       - key: OCM_API_KEY
         sync: false
