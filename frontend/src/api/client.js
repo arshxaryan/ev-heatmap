@@ -1,8 +1,16 @@
 /**
  * Tiny API client with in-memory + sessionStorage caching and a `useApi` hook.
  * Every page uses useApi → skeleton loaders + error states everywhere.
+ *
+ * API base resolution order:
+ *   1. VITE_API_URL env var at build time (explicit override)
+ *   2. dev → '/api' (Vite dev-server proxy to localhost:4000)
+ *   3. prod default → the deployed Render backend, so a build can never
+ *      accidentally point the live site at its own domain.
  */
-const BASE = import.meta.env.VITE_API_URL || '/api';
+const BASE = import.meta.env.VITE_API_URL || (import.meta.env.DEV
+  ? '/api'
+  : 'https://ev-gap-backend-lqmy.onrender.com/api');
 const TTL = 60_000; // 1 minute response cache
 
 const memory = new Map();
