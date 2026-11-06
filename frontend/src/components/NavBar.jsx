@@ -3,7 +3,8 @@ import { useTheme } from '../theme.jsx';
 
 const links = [
   { to: '/', label: 'Home' },
-  { to: '/map', label: 'Live Map' },
+  { to: '/map', label: 'Heat Map' },
+  { to: '/stats', label: 'Stats' },
   { to: '/insights', label: 'Insights' },
   { to: '/compare', label: 'Compare' },
   { to: '/methodology', label: 'Methodology' },
@@ -49,7 +50,7 @@ export default function NavBar({ lastUpdated }) {
           >
             {dark ? '☀️' : '🌙'}
           </button>
-          {location.pathname !== '/map' && (
+          {!location.pathname.startsWith('/map') && !location.pathname.startsWith('/stats') && (
             <Link to="/map" className="hidden rounded-lg bg-brand-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-600 sm:block">
               Open Map
             </Link>

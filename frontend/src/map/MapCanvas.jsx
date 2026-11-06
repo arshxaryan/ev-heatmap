@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, ZoomControl, ScaleControl } from 'react-leaflet';
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, ZoomControl, ScaleControl, useMap } from 'react-leaflet';
 import HeatLayer from './HeatLayer';
 import ClusterLayer from './ClusterLayer';
 import { GapLayer } from './GapLayer.jsx';
@@ -12,6 +13,35 @@ const TILES = {
   url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 };
 const ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors';
+
+/**
+ * Keeps Leaflet's internal size in sync with its container (fullscreen,
+ * sidebar collapses, window resize). Without this the map renders tiny /
+ * half-tiled when the container changes size — the classic Leaflet fix is
+ * invalidateSize().
+ */
+function ResizeKeeper() {
+  const map = useMap();
+  useEffect(() => {
+    const el = map.getContainer();
+    const refresh = () => setTimeout(() => map.invalidateSize(), 120);
+    document.addEventListener('fullscreenchange', refresh);
+    document.addEventListener('webkitfullscreenchange', refresh);
+    window.addEventListener('resize', refresh);
+    let ro;
+    if (window.ResizeObserver) {
+      ro = new ResizeObserver(() => map.invalidateSize({ animate: false }));
+      ro.observe(el);
+    }
+    return () => {
+      document.removeEventListener('fullscreenchange', refresh);
+      document.removeEventListener('webkitfullscreenchange', refresh);
+      window.removeEventListener('resize', refresh);
+      ro?.disconnect();
+    };
+  }, [map]);
+  return null;
+}
 
 /**
  * MapCanvas — the one Leaflet map used everywhere (Home preview & dashboard).
@@ -47,6 +77,7 @@ export default function MapCanvas({
       <ZoomControl position="bottomright" />
       <ScaleControl position="bottomleft" metric imperial={false} />
       <CameraTarget target={camera} />
+      <ResizeKeeper />
 
       {evPoints?.length > 0 && (
         <HeatLayer points={evPoints} gradient={EV_HEAT_GRADIENT} />

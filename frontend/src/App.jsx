@@ -2,7 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
-import MapDashboard from './pages/MapDashboard.jsx';
+import MapPage from './pages/MapPage.jsx';
+import StatsPage from './pages/StatsPage.jsx';
 import Insights from './pages/Insights.jsx';
 import Compare from './pages/Compare.jsx';
 import Methodology from './pages/Methodology.jsx';
@@ -18,7 +19,8 @@ export default function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/map" element={<MapDashboard />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/methodology" element={<Methodology />} />

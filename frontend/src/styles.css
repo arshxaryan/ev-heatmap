@@ -25,3 +25,22 @@
 *::-webkit-scrollbar-thumb { background: rgba(100,116,139,.4); border-radius: 8px; }
 
 html { scroll-behavior: smooth; }
+
+/* fullscreen map: fill the screen, drop the card chrome, keep Leaflet sane */
+.map-shell:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: 0;
+  background: #020617; /* slate-950 so letterboxing isn't white */
+}
+.map-shell:fullscreen .leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.map-shell:fullscreen .leaflet-control-container .leaflet-control-zoom,
+.map-shell:fullscreen .leaflet-control-container .leaflet-control-scale-line {
+  z-index: 500;
+}
+
