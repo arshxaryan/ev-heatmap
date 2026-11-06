@@ -6,6 +6,20 @@ require('dotenv').config();
 
 const path = require('path');
 
+// Origins that must always work for this app's real deployments, so a stale
+// dashboard env var can never lock the live sites out of the API.
+const DEFAULT_CORS_ORIGINS = [
+  'https://ev-gap-arshx.web.app',
+  'https://careercompass-77eae.web.app',
+  'https://careercompass-77eae.firebaseapp.com',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+];
+const envCorsOrigins = (process.env.CORS_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
+const corsOrigins = envCorsOrigins.includes('*') || envCorsOrigins.length === 0
+  ? '*'
+  : [...new Set([...envCorsOrigins, ...DEFAULT_CORS_ORIGINS])];
+
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT || '4000', 10),
@@ -25,8 +39,8 @@ module.exports = {
   vahanBaseUrl: process.env.VAHAN_BASE_URL || 'https://vahan.parivahan.gov.in/vahan4/dashboard',
   vahanUserAgent: process.env.VAHAN_USER_AGENT || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) EVGapIndia/1.0',
 
-  // CORS origins allowed to call the API (comma separated).
-  corsOrigins: (process.env.CORS_ORIGINS || '*').split(',').map((s) => s.trim()),
+  // CORS origins allowed to call the API (comma separated). "*" allows all.
+  corsOrigins,
 
   // Optional shared secret for POST endpoints (uploads). When set, POSTs
   // require header x-api-key: <key>. Never commit real keys — .env only.
